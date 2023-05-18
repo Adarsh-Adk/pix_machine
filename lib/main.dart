@@ -45,14 +45,63 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return BlocListener<AuthenticationBloc, AuthenticationState>(
-      listener: (context, state) {
-        state.when(authenticated: () {
-          goRouter.go(CustomRouter.home);
-        }, unAuthenticated: () {
-          goRouter.go(CustomRouter.loginScreen);
-        });
-      },
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<AuthenticationBloc, AuthenticationState>(
+          listener: (context, state) {
+            state.when(authenticated: () {
+              goRouter.go(CustomRouter.home);
+            }, unAuthenticated: () {
+              goRouter.go(CustomRouter.loginScreen);
+            });
+          },
+        ),
+        BlocListener<EmployeeListBloc, EmployeeListState>(
+          listener: (context, state) {
+            state.when(
+                initial: () {},
+                loading: () {},
+                success: (_) {},
+                failed: (response) {
+                  if (response.toLowerCase().contains("unauthenticated")) {
+                    context
+                        .read<AuthenticationBloc>()
+                        .add(const AuthenticationEvent.signOut());
+                  }
+                });
+          },
+        ),
+        BlocListener<DesignationBloc, DesignationState>(
+          listener: (context, state) {
+            state.when(
+                initial: () {},
+                loading: () {},
+                success: (_) {},
+                failed: (response) {
+                  if (response.toLowerCase().contains("unauthenticated")) {
+                    context
+                        .read<AuthenticationBloc>()
+                        .add(const AuthenticationEvent.signOut());
+                  }
+                });
+          },
+        ),
+        BlocListener<AddEmployeeBloc, AddEmployeeState>(
+          listener: (context, state) {
+            state.when(
+                initial: () {},
+                loading: () {},
+                success: () {},
+                failed: (response) {
+                  if (response.toLowerCase().contains("unauthenticated")) {
+                    context
+                        .read<AuthenticationBloc>()
+                        .add(const AuthenticationEvent.signOut());
+                  }
+                });
+          },
+        ),
+      ],
       child: MaterialApp.router(
         title: AppConstants.appName,
         theme: AppTheme.light(),

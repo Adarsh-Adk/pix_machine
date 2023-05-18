@@ -12,7 +12,7 @@ import '../services/shared_preference.dart';
 
 class EmployeeRepository {
   static final _client = http.Client();
-  Uri _uri = Uri.parse("${AppConstants.baseUrl}employees");
+  final Uri _uri = Uri.parse("${AppConstants.baseUrl}employees");
 
   Future<DataResponse> getEmployees() async {
     try {
@@ -40,11 +40,16 @@ class EmployeeRepository {
                 serverResponse = ServerResponse.fromJson(data["data"]);
                 list.addAll(serverResponse.data);
               }
+              if (response.statusCode == 401) {
+                return DataResponse(error: "Unauthenticated");
+              }
             }
           }
         }
         return DataResponse(
             data: list.map((e) => EmployeeResponse.fromJson(e)).toList());
+      } else if (response.statusCode == 401) {
+        return DataResponse(error: "Unauthenticated");
       } else {
         return DataResponse(error: "Error Occurred: ${data["message"]}");
       }
@@ -84,6 +89,8 @@ class EmployeeRepository {
     if (response.statusCode == 200) {
       String message = data["message"] ?? "";
       return DataResponse(data: message);
+    } else if (response.statusCode == 401) {
+      return DataResponse(error: "Unauthenticated");
     } else {
       return DataResponse(
           error:

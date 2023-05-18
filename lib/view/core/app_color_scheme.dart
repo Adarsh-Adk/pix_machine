@@ -8,7 +8,7 @@ class AppColorScheme {
   // static const Color secondaryColorLight = Color(0xFF12B0E8);
   static const Color secondaryColorLight = Color(0xFF5EAFE9);
   static const Color backgroundColorLight = Colors.white;
-  static const Color surfaceColorLight = Color(0xFFB3E5FC);
+  static const Color surfaceColorLight = Color(0xFFE3F1F7);
   static const Color onSurfaceColorLight = Colors.white;
   static const Color onBackgroundColorLight = Colors.white;
   static const Color onPrimaryColorLight = Color(0xFFFAFAFA);

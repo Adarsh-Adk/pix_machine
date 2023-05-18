@@ -33,8 +33,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   void didChangeDependencies() {
-    emailController.text = "pixbit123@gmail.com";
-    passwordController.text = "Abcd@123";
     size = MediaQuery.of(context).size;
     border = OutlineInputBorder(
       borderRadius: AppConstants.borderRadius,

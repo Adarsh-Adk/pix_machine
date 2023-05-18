@@ -63,7 +63,10 @@ class _AddEmployeeScreenState extends State<AddEmployeeScreen> {
         ),
         title: Text(
           "Add an employee",
-          style: Theme.of(context).textTheme.headlineSmall,
+          style: Theme.of(context)
+              .textTheme
+              .titleLarge
+              ?.copyWith(fontWeight: FontWeight.bold),
         ),
       ),
       body: BlocListener<AddEmployeeBloc, AddEmployeeState>(
@@ -424,7 +427,7 @@ class _AddEmployeeScreenState extends State<AddEmployeeScreen> {
               children: [
                 Text(
                   joinDate != null
-                      ? Utility.formatedDate(
+                      ? Utility.formattedDate(
                           joinDate.toString(),
                         )
                       : "Select a date",
@@ -503,7 +506,7 @@ class _AddEmployeeScreenState extends State<AddEmployeeScreen> {
               children: [
                 Text(
                   dateOfBirth != null
-                      ? Utility.formatedDate(
+                      ? Utility.formattedDate(
                           dateOfBirth.toString(),
                         )
                       : "Select a date",

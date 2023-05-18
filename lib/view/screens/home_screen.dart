@@ -17,12 +17,16 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  @override
-  void initState() {
+  reFetch() {
     BlocProvider.of<EmployeeListBloc>(context)
         .add(const EmployeeListEvent.fetch());
     BlocProvider.of<DesignationBloc>(context)
         .add(const DesignationEvent.fetch());
+  }
+
+  @override
+  void initState() {
+    reFetch();
     super.initState();
   }
 
@@ -34,30 +38,37 @@ class _HomeScreenState extends State<HomeScreen> {
           "Employee",
           style: Theme.of(context)
               .textTheme
-              .headlineSmall
+              .titleLarge
               ?.copyWith(fontWeight: FontWeight.bold),
         ),
       ),
-      body: BlocBuilder<EmployeeListBloc, EmployeeListState>(
-        builder: (context, state) {
-          return state.map(
-              initial: (_) => const CustomErrorWidget(),
-              loading: (_) => const CustomErrorWidget(),
-              success: (response) {
-                return ListView.builder(
-                  itemCount: response.data.length,
-                  itemBuilder: (context, index) {
-                    Employee employee = response.data[index];
-                    return EmployeeTile(
-                      employee: employee,
+      body: RefreshIndicator(
+        onRefresh: () async => reFetch(),
+        child: SingleChildScrollView(
+          child: BlocBuilder<EmployeeListBloc, EmployeeListState>(
+            builder: (context, state) {
+              return state.map(
+                  initial: (_) => const CustomErrorWidget(),
+                  loading: (_) => const CustomErrorWidget(),
+                  success: (response) {
+                    return ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: response.data.length,
+                      itemBuilder: (context, index) {
+                        Employee employee = response.data[index];
+                        return EmployeeTile(
+                          employee: employee,
+                        );
+                      },
                     );
                   },
-                );
-              },
-              failed: (response) => CustomErrorWidget(
-                    error: response.error,
-                  ));
-        },
+                  failed: (response) => CustomErrorWidget(
+                        error: response.error,
+                      ));
+            },
+          ),
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {

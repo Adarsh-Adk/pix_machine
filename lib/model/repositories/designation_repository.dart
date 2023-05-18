@@ -38,11 +38,16 @@ class DesignationRepository {
                 serverResponse = ServerResponse.fromJson(data["data"]);
                 list.addAll(serverResponse.data);
               }
+              if (response.statusCode == 401) {
+                return DataResponse(error: "Unauthenticated");
+              }
             }
           }
         }
         _list = list.map((e) => Designation.fromJson(e)).toList();
         return DataResponse(data: _list);
+      } else if (response.statusCode == 401) {
+        return DataResponse(error: "Unauthenticated");
       } else {
         return DataResponse(error: "Error Occurred");
       }

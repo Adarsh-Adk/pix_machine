@@ -1,6 +1,10 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SharedPreference {
+  static final SharedPreference _singleton = SharedPreference._internal();
+  factory SharedPreference() => _singleton;
+  SharedPreference._internal();
+
   static late SharedPreferences _instance;
 
   static init() async {

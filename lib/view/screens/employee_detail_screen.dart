@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../model/entities/employee.dart';
+import '../../view_model/util/utility.dart';
 import '../core/app_constants.dart';
 import '../widgets/app_padding.dart';
 
@@ -33,7 +34,10 @@ class _EmployeeDetailScreenState extends State<EmployeeDetailScreen> {
         ),
         title: Text(
           employee?.firstName ?? "Nil",
-          style: Theme.of(context).textTheme.headlineSmall,
+          style: Theme.of(context)
+              .textTheme
+              .titleLarge
+              ?.copyWith(fontWeight: FontWeight.bold),
         ),
       ),
       body: ListView(
@@ -100,7 +104,8 @@ class _EmployeeDetailScreenState extends State<EmployeeDetailScreen> {
                         children: [
                           Expanded(
                             child: DetailWidget(
-                              value: employee?.dateOfBirth,
+                              value:
+                                  Utility.formattedDate(employee?.dateOfBirth),
                               caption: "Date of Birth",
                             ),
                           ),
